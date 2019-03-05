@@ -64,6 +64,8 @@ import org.springframework.lang.Nullable;
  *
  * 一般应用开发者不会使用这个接口,所以像ApplicationContext这样的外观实现类不会实现这个接口,
  * 如果真手痒痒可以通过ApplicationContext的getAutowireCapableBeanFactory接口获取.
+ *
+ * 这个工厂接口继承自BeanFacotory，它扩展了自动装配的功能，根据类定义BeanDefinition装配Bean、执行前、后处理器等。
  */
 public interface AutowireCapableBeanFactory extends BeanFactory {
 
@@ -73,6 +75,8 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
+	 *
+	 * 这个常量表明工厂没有自动装配的Bean
 	 */
 	int AUTOWIRE_NO = 0;
 
@@ -82,6 +86,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
+	 * 表明根据名称自动装配
 	 */
 	int AUTOWIRE_BY_NAME = 1;
 
@@ -91,6 +96,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
+	 * 表明根据类型自动装配
 	 */
 	int AUTOWIRE_BY_TYPE = 2;
 
@@ -99,6 +105,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * can be satisfied (involves resolving the appropriate constructor).
 	 * @see #createBean
 	 * @see #autowire
+	 * 表明根据构造方法快速装配
 	 */
 	int AUTOWIRE_CONSTRUCTOR = 3;
 
@@ -109,6 +116,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #autowire
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
 	 * prefer annotation-based autowiring for clearer demarcation of autowiring needs.
+	 * 表明通过Bean的class的内部来自动装配（有没翻译错...）Spring3.0被弃用。
 	 */
 	@Deprecated
 	int AUTOWIRE_AUTODETECT = 4;
@@ -141,6 +149,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @param beanClass the class of the bean to create
 	 * @return the new bean instance
 	 * @throws BeansException if instantiation or wiring failed
+	 * 创建和填充外部bean实例的典型方法
 	 */
 	<T> T createBean(Class<T> beanClass) throws BeansException;
 
@@ -153,6 +162,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * use {@link #autowireBeanProperties} for those purposes.
 	 * @param existingBean the existing bean instance
 	 * @throws BeansException if wiring failed
+	 * 使用autowireBeanProperties装配属性
 	 */
 	void autowireBean(Object existingBean) throws BeansException;
 
@@ -172,12 +182,14 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * if there is no bean definition with the given name
 	 * @throws BeansException if the initialization failed
 	 * @see #initializeBean
+	 * 自动装配属性,填充属性值,使用诸如setBeanName,setBeanFactory这样的工厂回调填充属性,最好还要调用post processor
 	 */
 	Object configureBean(Object existingBean, String beanName) throws BeansException;
 
 
 	//-------------------------------------------------------------------------
 	// Specialized methods for fine-grained control over the bean lifecycle
+	// 在bean的生命周期进行细粒度控制的专门方法
 	//-------------------------------------------------------------------------
 
 	/**
@@ -196,6 +208,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * @see #AUTOWIRE_BY_NAME
 	 * @see #AUTOWIRE_BY_TYPE
 	 * @see #AUTOWIRE_CONSTRUCTOR
+	 * 会执行bean完整的初始化,包括BeanPostProcessors和initializeBean
 	 */
 	Object createBean(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
 

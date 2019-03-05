@@ -59,6 +59,14 @@ import org.springframework.lang.Nullable;
  * @since 2.5
  * @see org.springframework.beans.factory.support.DefaultListableBeanFactory
  * @see org.springframework.context.annotation.CommonAnnotationBeanPostProcessor
+ * SimpleJndiBeanFactory是spring beanFactory接口的基于jndi的简单实现。不支持枚举bean定义，故不需要实现ListableBeanFactory接口。
+ * 这个bean工厂可以解析制定名称的jndi名称，在J2EE应用中，jndi名称的命名空间为"java:/comp/env/".
+ *
+ * 这个bean工厂主要和spring的CommonAnnotationBeanPostProcessor 联合使用
+ *
+ * ListableBeanFactory是beanFactory接口的扩展接口，它可以枚举所有的bean实例，而不是客户端通过名称一个一个的查询得出所有的实例。
+ * 要预加载所有的bean定义的beanfactory可以实现这个接口来。
+ * 该 接口定义了访问容器中Bean基本信息的若干方法，如查看Bean的个数、获取某一类型Bean的配置名、查看容器中是否包括某一Bean等方法；
  */
 public class SimpleJndiBeanFactory extends JndiLocatorSupport implements BeanFactory {
 
