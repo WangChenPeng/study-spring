@@ -59,6 +59,11 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.config.ConfigurableListableBeanFactory
  * @see org.springframework.context.ApplicationContext#getAutowireCapableBeanFactory()
  * 添加集成其他框架功能.如果集成WebWork则可以使用Spring对Actions等进行管理.
+ * AutowireCapableBeanFactory在BeanFactory基础上实现了对存在实例的管理.可以使用这个接口集成其它框架,
+ * 捆绑并填充并不由Spring管理生命周期并已存在的实例.像集成WebWork的Actions 和Tapestry Page就很实用.
+ *
+ * 一般应用开发者不会使用这个接口,所以像ApplicationContext这样的外观实现类不会实现这个接口,
+ * 如果真手痒痒可以通过ApplicationContext的getAutowireCapableBeanFactory接口获取.
  */
 public interface AutowireCapableBeanFactory extends BeanFactory {
 
