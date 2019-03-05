@@ -65,18 +65,19 @@ public class DefaultDocumentLoader implements DocumentLoader {
      *
 	 * Load the {@link Document} at the supplied {@link InputSource} using the standard JAXP-configured
 	 * XML parser.
+	 * 使用标准的JAXP 将载入的Bean 定义资源转换成document 对象
 	 */
 	@Override
 	public Document loadDocument(InputSource inputSource, EntityResolver entityResolver,
 			ErrorHandler errorHandler, int validationMode, boolean namespaceAware) throws Exception {
-	    // 创建 DocumentBuilderFactory
+	    // 创建 DocumentBuilderFactory  创建文件解析器工厂
 		DocumentBuilderFactory factory = createDocumentBuilderFactory(validationMode, namespaceAware);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Using JAXP provider [" + factory.getClass().getName() + "]");
 		}
-		// 创建 DocumentBuilder
+		// 创建 DocumentBuilder  创建文档解析器
 		DocumentBuilder builder = createDocumentBuilder(factory, entityResolver, errorHandler);
-		// 解析 XML InputSource 返回 Document 对象
+		// 解析 XML InputSource 返回 Document 对象  解析Spring 的Bean 定义资源
 		return builder.parse(inputSource);
 	}
 
@@ -92,16 +93,19 @@ public class DefaultDocumentLoader implements DocumentLoader {
 	 */
 	protected DocumentBuilderFactory createDocumentBuilderFactory(int validationMode, boolean namespaceAware)
 			throws ParserConfigurationException {
-	    // 创建 DocumentBuilderFactory
+	    // 创建 DocumentBuilderFactory  创建文档解析工厂
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(namespaceAware); // 设置命名空间支持
 
+		//设置解析XML 的校验
 		if (validationMode != XmlValidationModeDetector.VALIDATION_NONE) {
-			factory.setValidating(true); // 开启校验
+			// 开启校验
+			factory.setValidating(true);
             // XSD 模式下，设置 factory 的属性
 			if (validationMode == XmlValidationModeDetector.VALIDATION_XSD) {
 				// Enforce namespace aware for XSD...
-				factory.setNamespaceAware(true); // XSD 模式下，强制设置命名空间支持
+				// XSD 模式下，强制设置命名空间支持
+				factory.setNamespaceAware(true);
                 // 设置 SCHEMA_LANGUAGE_ATTRIBUTE
 				try {
 					factory.setAttribute(SCHEMA_LANGUAGE_ATTRIBUTE, XSD_SCHEMA_LANGUAGE);

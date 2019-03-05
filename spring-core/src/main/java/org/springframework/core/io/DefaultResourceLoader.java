@@ -149,6 +149,7 @@ public class DefaultResourceLoader implements ResourceLoader {
     // ResourceLoader 中最核心的方法为 `#getResource()` ，它根据提供的 location 返回相应的 Resource 。
     // 而 DefaultResourceLoader 对该方法提供了**核心实现**
     // （因为，它的两个子类都没有提供覆盖该方法，所以可以断定 ResourceLoader 的资源加载策略就封装在 DefaultResourceLoader 中)
+	// 获取Resource 的具体实现方法
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
@@ -161,6 +162,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 		// 其次，以 / 开头，返回 ClassPathContextResource 类型的资源
+		//如果是类路径的方式，那需要使用ClassPathResource 来得到bean 文件的资源对象
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
         // 再次，以 classpath: 开头，返回 ClassPathResource 类型的资源
@@ -170,11 +172,14 @@ public class DefaultResourceLoader implements ResourceLoader {
 		} else {
 			try {
 				// Try to parse the location as a URL...
+				// 如果是URL 方式，使用UrlResource 作为bean 文件的资源对象
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			} catch (MalformedURLException ex) {
 			    // 最后，返回 ClassPathContextResource 类型的资源
 				// No URL -> resolve as resource path.
+				//如果既不是classpath 标识，又不是URL 标识的Resource 定位，则调用
+				//容器本身的getResourceByPath 方法获取Resource
 				return getResourceByPath(location);
 			}
 		}

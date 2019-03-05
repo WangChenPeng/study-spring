@@ -27,6 +27,8 @@ package org.springframework.context;
  * @see ApplicationEventPublisherAware
  * @see org.springframework.context.ApplicationEvent
  * @see org.springframework.context.event.EventPublicationInterceptor
+ * 封装事件发布功能的接口作为顶级接口
+ * 函数式接口
  */
 @FunctionalInterface
 public interface ApplicationEventPublisher {
@@ -37,6 +39,9 @@ public interface ApplicationEventPublisher {
 	 * (such as RequestHandledEvent) or application-specific events.
 	 * @param event the event to publish
 	 * @see org.springframework.web.context.support.RequestHandledEvent
+	 * 通知所有与此*应用程序注册的匹配侦听器的应用程序事件。事件可以是框架事件*(例如RequestHandledEvent)或特定于应用程序的事件。要发布的事件
+	 *
+	 * 函数式接口的默认实现
 	 */
 	default void publishEvent(ApplicationEvent event) {
 		publishEvent((Object) event);
@@ -50,6 +55,8 @@ public interface ApplicationEventPublisher {
 	 * @param event the event to publish
 	 * @since 4.2
 	 * @see PayloadApplicationEvent
+	 * 通知所有与此*应用程序注册的匹配侦听器的事件。
+	 * 如果指定的{@code事件}不是{@link ApplicationEvent}，则*它被包装在{@link PayloadApplicationEvent}中。
 	 */
 	void publishEvent(Object event);
 

@@ -45,6 +45,7 @@ public interface DocumentLoader {
 	 * @param namespaceAware {@code true} if support for XML namespaces is to be provided
 	 * @return the loaded {@link Document document}
 	 * @throws Exception if an error occurs
+	 * 使用标准的JAXP 将载入的Bean 定义资源转换成document 对象
 	 */
 	Document loadDocument(
 			InputSource inputSource, EntityResolver entityResolver,

@@ -54,6 +54,32 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableApplicationContext
  * @see org.springframework.beans.factory.BeanFactory
  * @see org.springframework.core.io.ResourceLoader
+ * ApplicationContext 允许上下文嵌套，通过保持父上下文可以维持一个上下文体系。对于Bean 的查
+ * 找可以在这个上下文体系中发生，首先检查当前上下文，其次是父上下文，逐级向上，这样为不同的
+ * Spring 应用提供了一个共享的Bean 定义环境。
+ *
+ * ApplicationContext接口是有BeanFactory接口派生出来的,所以提供了BeanFactory的所有功能.
+ * ApplicationContext是一种更加面向框架的工作方式以及对上下文进行分层和实现继承.并且ApplicationContext还额外提供了一下功能.
+ * • MessageSource, 提供国际化的消息访问
+ * • 资源访问，如URL和文件
+ * • 事件传播
+ * • 载入多个（有继承关系）上下文 ，使得每一个上下文都专注于一个特定的层次，比如应用的web层
+ *
+ * ApplicationContext扩展了ResourceLoader(资源加载器)接口，从而可以用来加载多个Resource，而BeanFactory是没有扩展ResourceLoader.
+ *
+ * 1).BeanFactroy采用的是延迟加载形式来注入Bean的，即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化，
+ * 这样，我们就不能发现一些存在的Spring的配置问题。而ApplicationContext则相反，它是在容器启动时，一次性创建了所有的Bean。
+ * 这样，在容器启动时，我们就可以发现Spring中存在的配置错误。
+ *
+ * 2).BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor的使用，
+ * 但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册
+ *
+ * ApplicationContext的三个实现类：
+ * a、ClassPathXmlApplication： 把上下文文件当成类路径资源
+ * b、FileSystemXmlApplication：从文件系统中的XML文件载入上下文定义信息
+ * c、XmlWebApplicationContext：从Web系统中的XML文件载入上下文定义信息
+ *
+ *
  */
 public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
 		MessageSource, ApplicationEventPublisher, ResourcePatternResolver {
